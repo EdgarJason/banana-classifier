@@ -276,7 +276,7 @@ export default function BananaClassifierPage() {
     pcd_mobilenet: { installed: false, filename: null, sizeMb: null },
   });
 
-  const backendUrl = "/api/classify";
+  const backendUrl = process.env.NEXT_PUBLIC_API_URL || "/api/classify";
   const [backendError, setBackendError] = useState<string | null>(null);
 
   const fileInputRef = useRef<HTMLInputElement>(null);
