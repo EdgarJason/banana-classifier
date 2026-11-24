@@ -480,6 +480,26 @@ export default function BananaClassifierPage() {
     }
   };
 
+  const getConfidenceStyle = (confidence?: number | null) => {
+    const val = confidence ?? 0;
+    if (val > 70) {
+      return {
+        bar: "from-emerald-400 to-emerald-500",
+        text: "text-emerald-400",
+      };
+    }
+    if (val >= 40) {
+      return {
+        bar: "from-amber-400 to-orange-500",
+        text: "text-amber-400",
+      };
+    }
+    return {
+      bar: "from-rose-500 to-red-600",
+      text: "text-rose-400",
+    };
+  };
+
   const theme = getTheme();
   const currentState = isScanning ? "scanning" : resultsData ? resultsData.prediction : "idle";
   const activeModelsCount = [
@@ -844,18 +864,11 @@ export default function BananaClassifierPage() {
                 <div className="p-4 rounded-2xl bg-slate-950/70 border border-white/10 transition-all hover:border-yellow-400/40">
                   <div className="flex items-center justify-between mb-2">
                     <div className="flex items-center gap-2">
-                      <div className="p-1.5 rounded-lg bg-yellow-400/10 text-yellow-400">
-                        <Binary className="w-4 h-4" />
-                      </div>
                       <div>
                         <h4 className="text-sm font-extrabold text-white">1. PCD + ML</h4>
                         <p className="text-[11px] text-slate-400">Random Forest · 135 Fitur PCD</p>
                       </div>
                     </div>
-
-                    <span className="text-[10px] font-mono px-2 py-0.5 rounded-full bg-emerald-500/15 text-emerald-300 border border-emerald-500/30">
-                      {resultsData?.experiments?.pcd_ml?.model_file || modelsStatus.pcd_ml.filename || "best_model.joblib"}
-                    </span>
                   </div>
 
                   {resultsData?.experiments?.pcd_ml?.prediction ? (
@@ -880,12 +893,12 @@ export default function BananaClassifierPage() {
                         <span className="text-[10px] text-slate-400 uppercase tracking-wider block">
                           Tingkat Akurasi
                         </span>
-                        <span className="text-xl font-black font-mono text-white">
+                        <span className={`text-xl font-black font-mono ${getConfidenceStyle(resultsData.experiments.pcd_ml.confidence).text}`}>
                           {resultsData.experiments.pcd_ml.confidence}%
                         </span>
                         <div className="w-24 h-1.5 rounded-full bg-slate-800 overflow-hidden mt-1">
                           <div
-                            className="h-full bg-gradient-to-r from-yellow-400 to-amber-500 rounded-full"
+                            className={`h-full bg-gradient-to-r ${getConfidenceStyle(resultsData.experiments.pcd_ml.confidence).bar} rounded-full transition-all duration-500`}
                             style={{ width: `${resultsData.experiments.pcd_ml.confidence}%` }}
                           />
                         </div>
@@ -902,18 +915,11 @@ export default function BananaClassifierPage() {
                 <div className="p-4 rounded-2xl bg-slate-950/70 border border-white/10 transition-all hover:border-yellow-400/40">
                   <div className="flex items-center justify-between mb-2">
                     <div className="flex items-center gap-2">
-                      <div className="p-1.5 rounded-lg bg-sky-400/10 text-sky-400">
-                        <Cpu className="w-4 h-4" />
-                      </div>
                       <div>
                         <h4 className="text-sm font-extrabold text-white">2. Raw + MobileNetV2</h4>
                         <p className="text-[11px] text-slate-400">Deep Learning · Raw Image (224x224)</p>
                       </div>
                     </div>
-
-                    <span className="text-[10px] font-mono px-2 py-0.5 rounded-full bg-sky-500/15 text-sky-300 border border-sky-500/30">
-                      {resultsData?.experiments?.raw_mobilenet?.model_file || modelsStatus.raw_mobilenet.filename || "best_finetuned_model.keras"}
-                    </span>
                   </div>
 
                   {resultsData?.experiments?.raw_mobilenet?.prediction ? (
@@ -924,7 +930,7 @@ export default function BananaClassifierPage() {
                         </span>
                         <div
                           className={`text-xl font-black tracking-tight ${
-                            RIPENESS_LABELS[resultsData.experiments.raw_mobilenet.prediction]?.color || "text-sky-400"
+                            RIPENESS_LABELS[resultsData.experiments.raw_mobilenet.prediction]?.color || "text-yellow-400"
                           }`}
                         >
                           {RIPENESS_LABELS[resultsData.experiments.raw_mobilenet.prediction]?.label}
@@ -938,12 +944,12 @@ export default function BananaClassifierPage() {
                         <span className="text-[10px] text-slate-400 uppercase tracking-wider block">
                           Tingkat Akurasi
                         </span>
-                        <span className="text-xl font-black font-mono text-white">
+                        <span className={`text-xl font-black font-mono ${getConfidenceStyle(resultsData.experiments.raw_mobilenet.confidence).text}`}>
                           {resultsData.experiments.raw_mobilenet.confidence}%
                         </span>
                         <div className="w-24 h-1.5 rounded-full bg-slate-800 overflow-hidden mt-1">
                           <div
-                            className="h-full bg-gradient-to-r from-sky-400 to-blue-500 rounded-full"
+                            className={`h-full bg-gradient-to-r ${getConfidenceStyle(resultsData.experiments.raw_mobilenet.confidence).bar} rounded-full transition-all duration-500`}
                             style={{ width: `${resultsData.experiments.raw_mobilenet.confidence}%` }}
                           />
                         </div>
@@ -960,18 +966,11 @@ export default function BananaClassifierPage() {
                 <div className="p-4 rounded-2xl bg-slate-950/70 border border-white/10 transition-all hover:border-yellow-400/40">
                   <div className="flex items-center justify-between mb-2">
                     <div className="flex items-center gap-2">
-                      <div className="p-1.5 rounded-lg bg-purple-400/10 text-purple-400">
-                        <Clock className="w-4 h-4" />
-                      </div>
                       <div>
                         <h4 className="text-sm font-extrabold text-white">3. PCD + MobileNetV2</h4>
                         <p className="text-[11px] text-slate-400">Segmentasi Citra + MobileNetV2</p>
                       </div>
                     </div>
-
-                    <span className="text-[10px] font-mono px-2 py-0.5 rounded-full bg-purple-500/15 text-purple-300 border border-purple-500/30">
-                      {resultsData?.experiments?.pcd_mobilenet?.model_file || modelsStatus.pcd_mobilenet.filename || "best_mixed_model.keras"}
-                    </span>
                   </div>
 
                   {resultsData?.experiments?.pcd_mobilenet?.prediction ? (
@@ -982,7 +981,7 @@ export default function BananaClassifierPage() {
                         </span>
                         <div
                           className={`text-xl font-black tracking-tight ${
-                            RIPENESS_LABELS[resultsData.experiments.pcd_mobilenet.prediction]?.color || "text-purple-400"
+                            RIPENESS_LABELS[resultsData.experiments.pcd_mobilenet.prediction]?.color || "text-yellow-400"
                           }`}
                         >
                           {RIPENESS_LABELS[resultsData.experiments.pcd_mobilenet.prediction]?.label}
@@ -996,12 +995,12 @@ export default function BananaClassifierPage() {
                         <span className="text-[10px] text-slate-400 uppercase tracking-wider block">
                           Tingkat Akurasi
                         </span>
-                        <span className="text-xl font-black font-mono text-white">
+                        <span className={`text-xl font-black font-mono ${getConfidenceStyle(resultsData.experiments.pcd_mobilenet.confidence).text}`}>
                           {resultsData.experiments.pcd_mobilenet.confidence}%
                         </span>
                         <div className="w-24 h-1.5 rounded-full bg-slate-800 overflow-hidden mt-1">
                           <div
-                            className="h-full bg-gradient-to-r from-purple-400 to-indigo-500 rounded-full"
+                            className={`h-full bg-gradient-to-r ${getConfidenceStyle(resultsData.experiments.pcd_mobilenet.confidence).bar} rounded-full transition-all duration-500`}
                             style={{ width: `${resultsData.experiments.pcd_mobilenet.confidence}%` }}
                           />
                         </div>
