@@ -1,26 +1,99 @@
 @import "tailwindcss";
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
-}
-
 @theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+  --font-sans: var(--font-plus-jakarta-sans), system-ui, -apple-system, sans-serif;
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+@layer utilities {
+  @keyframes scanline {
+    0% {
+      top: 0%;
+      opacity: 0.8;
+    }
+    50% {
+      opacity: 1;
+    }
+    100% {
+      top: 100%;
+      opacity: 0.8;
+    }
   }
-}
 
-body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  @keyframes pulseGlow {
+    0%, 100% {
+      opacity: 0.35;
+      transform: scale(1);
+    }
+    50% {
+      opacity: 0.75;
+      transform: scale(1.04);
+    }
+  }
+
+  @keyframes floatSlow {
+    0%, 100% {
+      transform: translateY(0px) rotate(0deg);
+    }
+    50% {
+      transform: translateY(-6px) rotate(1.5deg);
+    }
+  }
+
+  @keyframes bounceJoy {
+    0%, 100% {
+      transform: translateY(0) scale(1);
+    }
+    40% {
+      transform: translateY(-14px) scale(1.03);
+    }
+    60% {
+      transform: translateY(-4px) scale(0.99);
+    }
+  }
+
+  @keyframes pupilGlance {
+    0%, 45%, 100% {
+      transform: translate(0px, 0px);
+    }
+    55%, 70% {
+      transform: translate(-3px, 1px);
+    }
+    80%, 90% {
+      transform: translate(3px, -1px);
+    }
+  }
+
+  /* Natural eye blinking - eyes stay wide open 96% of the time, only a quick split-second blink */
+  @keyframes minionBlink {
+    0%, 94%, 98%, 100% {
+      transform: scaleY(1);
+    }
+    96% {
+      transform: scaleY(0.12);
+    }
+  }
+
+  .animate-scan {
+    animation: scanline 2.2s ease-in-out infinite alternate;
+  }
+
+  .animate-pulse-glow {
+    animation: pulseGlow 4s ease-in-out infinite;
+  }
+
+  .animate-float-slow {
+    animation: floatSlow 4s ease-in-out infinite;
+  }
+
+  .animate-bounce-joy {
+    animation: bounceJoy 1.2s ease-in-out infinite;
+  }
+
+  .animate-pupil-glance {
+    animation: pupilGlance 6s ease-in-out infinite;
+  }
+
+  .animate-minion-blink {
+    animation: minionBlink 3.8s ease-in-out infinite;
+  }
 }
